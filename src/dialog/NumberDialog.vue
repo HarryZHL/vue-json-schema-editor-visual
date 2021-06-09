@@ -101,7 +101,7 @@ export default {
   name: 'NumberDialog',
   inheritAttrs: false,
   props: { initData: { type: Object, default: () => ({}) } },
-  data() {
+  data () {
     return {
       enableEnum: false,
       formData: {
@@ -109,7 +109,7 @@ export default {
         minLength: undefined,
         maxLength: undefined,
         enum: undefined,
-        enumDesc: undefined,
+        enumDesc: undefined
       },
       rules: {
         default: [],
@@ -117,12 +117,12 @@ export default {
         maxLength: [],
         innerScope: [],
         enum: [],
-        enumDesc: [],
-      },
+        enumDesc: []
+      }
     }
   },
   methods: {
-    onOpen() {
+    onOpen () {
       const { minLength, maxLength, enumDesc } = this.initData
       let enumValue = this.initData.enum
       if (enumValue) {
@@ -140,14 +140,14 @@ export default {
         { default: this.initData.default, enum: enumValue }
       )
     },
-    onClose() {
-      this.$refs['elForm'].resetFields()
+    onClose () {
+      this.$refs.elForm.resetFields()
     },
-    close() {
+    close () {
       this.$emit('update:visible', false)
     },
-    handleConfirm() {
-      this.$refs['elForm'].validate((valid) => {
+    handleConfirm () {
+      this.$refs.elForm.validate((valid) => {
         if (!valid) return
         const newData = getValidFormVal(this.formData)
         if (newData.enum) {
@@ -159,11 +159,11 @@ export default {
         this.$jsEditorEvent.emit(`schema-update-${this.initData.editorId}`, {
           eventType: 'save-setting',
           ...this.initData, // 之前的参数
-          newData, // 设置数据
+          newData // 设置数据
         })
         this.close()
       })
-    },
-  },
+    }
+  }
 }
 </script>

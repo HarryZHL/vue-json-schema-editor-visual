@@ -1,31 +1,31 @@
-const Mock = require('mockjs');
-const jsf = require('json-schema-faker');
+const Mock = require('mockjs')
+const jsf = require('json-schema-faker')
 
-jsf.extend('mock', function() {
+jsf.extend('mock', function () {
   return {
-    mock: function(xx) {
-      return Mock.mock(xx);
+    mock: function (xx) {
+      return Mock.mock(xx)
     }
-  };
-});
+  }
+})
 
 const defaultOptions = {
   failOnInvalidTypes: false,
   failOnInvalidFormat: false,
   alwaysFakeOptionals: true,
   useDefaultValue: true
-};
+}
 
 export const schemaToJson = (schema, options = {}) => {
-  Object.assign(options, defaultOptions);
+  Object.assign(options, defaultOptions)
 
-  jsf.option(options);
-  let result;
+  jsf.option(options)
+  let result
   try {
-    result = jsf.generate(schema);
+    result = jsf.generate(schema)
   } catch (err) {
-    result = err.message;
+    result = err.message
   }
-  jsf.option(defaultOptions);
-  return result;
-};
+  jsf.option(defaultOptions)
+  return result
+}

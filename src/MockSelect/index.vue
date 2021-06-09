@@ -27,21 +27,21 @@ export default {
       default: () => []
     }
   },
-  data() {
+  data () {
     return {
       mockValue: ''
     }
   },
-  created() {},
-  mounted() {},
+  created () {},
+  mounted () {},
   methods: {
-    showEdit() {
+    showEdit () {
       this.$emit('showEdit')
     },
-    handleChange(e) {
+    handleChange (e) {
       this.$emit('change', e)
     },
-    querySearchAsync(queryString, cb) {
+    querySearchAsync (queryString, cb) {
       const arr = this.mock || []
       const results = queryString
         ? arr.filter(this.createStateFilter(queryString))
@@ -49,7 +49,7 @@ export default {
 
       cb(results)
     },
-    createStateFilter(queryString) {
+    createStateFilter (queryString) {
       return state => {
         return (
           state.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0

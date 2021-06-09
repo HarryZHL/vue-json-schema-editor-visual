@@ -45,38 +45,38 @@ export default {
   inheritAttrs: false,
   props: { initData: { type: Object, default: () => ({}) } },
 
-  data() {
+  data () {
     return {
       formData: {
         minItems: undefined,
-        maxItems: undefined,
-      },
+        maxItems: undefined
+      }
     }
   },
-  created() {},
+  created () {},
   methods: {
-    onOpen() {
+    onOpen () {
       const { minItems, maxItems } = this.initData
       Object.assign(this.formData, { minItems, maxItems })
     },
-    onClose() {
-      this.$refs['elForm'].resetFields()
+    onClose () {
+      this.$refs.elForm.resetFields()
     },
-    close() {
+    close () {
       this.$emit('update:visible', false)
     },
-    handleConfirm() {
-      this.$refs['elForm'].validate((valid) => {
+    handleConfirm () {
+      this.$refs.elForm.validate((valid) => {
         if (!valid) return
         const newData = getValidFormVal(this.formData)
         this.$jsEditorEvent.emit(`schema-update-${this.initData.editorId}`, {
           eventType: 'save-setting',
           ...this.initData, // 之前的参数
-          newData, // 设置数据
+          newData // 设置数据
         })
         this.close()
       })
-    },
-  },
+    }
+  }
 }
 </script>

@@ -34,7 +34,7 @@ export default {
   inheritAttrs: false,
   props: {
     data: {
-      type: Object,
+      type: Array,
       default: () => {
         return []
       }
@@ -50,13 +50,13 @@ export default {
       default: 'editor_id'
     }
   },
-  data() {
+  data () {
     return {
       name: []
     }
   },
   computed: {
-    nameArray() {
+    nameArray () {
       return [].concat(this.name, 'properties')
     }
   },

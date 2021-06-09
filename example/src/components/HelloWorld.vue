@@ -26,7 +26,7 @@
 // demo解释器无法兼容 import
 // import { warningToast, deepClone } from '@sinokit/utils';
 export default {
-  data() {
+  data () {
     return {
       schemaKey: '1222',
       // schema 对象
@@ -36,16 +36,16 @@ export default {
         title: 'title',
         properties: {
           field_1: {
-            type: 'string',
-          },
-        },
+            type: 'string'
+          }
+        }
       },
       schema3: {
         type: 'object',
         title: 'title',
         properties: {
           field_1: {
-            type: 'string',
+            type: 'string'
           },
           field_2: {
             type: 'object',
@@ -59,32 +59,32 @@ export default {
                       type: 'object',
                       properties: {
                         field_1fca9: {
-                          type: 'string',
+                          type: 'string'
                         },
                         field_21b59: {
-                          type: 'string',
-                        },
-                      },
-                    },
-                  },
+                          type: 'string'
+                        }
+                      }
+                    }
+                  }
                 },
-                required: ['field_4'],
-              },
+                required: ['field_4']
+              }
             },
-            required: ['field_3'],
-          },
+            required: ['field_3']
+          }
         },
-        required: ['field_1', 'field_2'],
-      },
+        required: ['field_1', 'field_2']
+      }
     }
   },
-  created() {},
-  mounted() {
+  created () {},
+  mounted () {
     this.schema = this.schema3
     this.schemaKey = Date.now()
   },
   methods: {
-    handleToggleSchema() {
+    handleToggleSchema () {
       if (JSON.stringify(this.schema) === JSON.stringify(this.schema2)) {
         this.schema = Object.assign({}, this.schema3)
       } else {
@@ -96,7 +96,7 @@ export default {
     /**
      * 分页参数添加&删除
      */
-    handlePageParams() {
+    handlePageParams () {
       if (this.schema.type !== 'object') {
         /*  return warningToast(
             '当前 Schema 不是对象类型，不能添加分页属性',
@@ -118,21 +118,21 @@ export default {
         page: {
           type: 'number',
           default: 1,
-          description: '第几页',
+          description: '第几页'
         },
         size: {
           type: 'number',
           default: 10,
-          description: '每页记录数量',
-        },
+          description: '每页记录数量'
+        }
       }
       Object.assign(cloneSchema.properties, pageInfo)
       this.schema = cloneSchema
       this.schemaKey = Date.now() + ''
     },
-    onSchemaChange(v) {
+    onSchemaChange (v) {
       this.schemaJsonString = JSON.stringify(v, null, 2)
-    },
-  },
+    }
+  }
 }
 </script>

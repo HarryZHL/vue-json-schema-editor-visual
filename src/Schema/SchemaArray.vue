@@ -148,77 +148,77 @@ export default {
   props: {
     isMock: {
       type: Boolean,
-      default: false,
+      default: false
     },
     showTitle: {
       type: Boolean,
-      default: false,
+      default: false
     },
     showDefaultValue: { type: Boolean, default: false },
     editorId: {
       type: String,
-      default: 'editor_id',
+      default: 'editor_id'
     },
     name: {
       type: String,
-      default: '',
+      default: ''
     },
     prefix: {
       type: Array,
-      default: () => [],
+      default: () => []
     },
     data: {
       type: Object,
-      default: () => {},
+      default: () => {}
     },
     action: {
       type: Function,
-      default: () => () => {},
-    },
+      default: () => () => {}
+    }
   },
-  data() {
+  data () {
     return {
       tagPaddingLeftStyle: {},
       schemaTypes: SCHEMA_TYPE,
       items: this.data.items,
-      showIcon: false,
+      showIcon: false
     }
   },
 
   computed: {
-    nameArray() {
+    nameArray () {
       return [].concat(this.prefixArray, 'properties')
     },
-    prefixArray() {
+    prefixArray () {
       return [].concat(this.prefix, 'items')
-    },
+    }
   },
-  beforeMount() {
+  beforeMount () {
     const length = this.prefix.filter((name) => name !== 'properties').length
     this.tagPaddingLeftStyle = {
-      paddingLeft: `${20 * (length + 1)}px`,
+      paddingLeft: `${20 * (length + 1)}px`
     }
   },
   methods: {
-    isUndefined() {
+    isUndefined () {
       return isUndefined
     },
-    handleClickIcon() {
+    handleClickIcon () {
       this.showIcon = !this.showIcon
     },
-    handleAction(opts) {
+    handleAction (opts) {
       const { prefix, name } = this
       this.$jsEditorEvent.emit(`schema-update-${this.editorId}`, {
         prefix,
         name: name || 'items',
-        ...opts,
+        ...opts
       })
     },
-    handleChangeMock() {},
-    handleChangeType(value) {
+    handleChangeMock () {},
+    handleChangeType (value) {
       console.log(value)
       this.handleAction({ eventType: 'schema-type', value })
-    },
-  },
+    }
+  }
 }
 </script>

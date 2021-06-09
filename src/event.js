@@ -11,24 +11,24 @@
   }
  */
 
-import Vue from 'vue';
+import Vue from 'vue'
 
 const eventHub = new Vue({
   methods: {
-    on(...args) {
-      this.$on.apply(this, args);
+    on (...args) {
+      this.$on.apply(this, args)
     },
-    emit(...args) {
-      this.$emit.apply(this, args);
+    emit (...args) {
+      this.$emit.apply(this, args)
     },
-    off(...args) {
-      this.$off.apply(this, args);
+    off (...args) {
+      this.$off.apply(this, args)
     },
-    once(...args) {
-      this.$once.apply(this, args);
-    },
-  },
-});
+    once (...args) {
+      this.$once.apply(this, args)
+    }
+  }
+})
 
 /* const CustomEventPlugin = V =>
   Object.defineProperty(V.prototype, '$event', {
@@ -37,12 +37,12 @@ const eventHub = new Vue({
   }); */
 
 const CustomEventPlugin = {
-  install: function(V) {
+  install: function (V) {
     Object.defineProperty(V.prototype, '$jsEditorEvent', {
       value: eventHub,
-      writable: true,
-    });
-  },
-};
+      writable: true
+    })
+  }
+}
 
-export default CustomEventPlugin;
+export default CustomEventPlugin

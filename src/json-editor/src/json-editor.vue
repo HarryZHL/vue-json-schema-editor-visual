@@ -10,53 +10,54 @@ import 'codemirror/addon/lint/lint.css'
 import 'codemirror/lib/codemirror.css'
 import 'codemirror/theme/idea.css'
 import 'codemirror/theme/rubyblue.css'
-require('script-loader!jsonlint')
 import 'codemirror/mode/javascript/javascript'
 import 'codemirror/addon/lint/lint'
 import 'codemirror/addon/lint/json-lint'
+// eslint-disable-next-line import/no-webpack-loader-syntax
+require('script-loader!jsonlint')
 
 export default {
   name: 'SJsonEditor',
   props: {
     value: {
       type: Object,
-      default: () => ({}),
+      default: () => ({})
     },
     readonly: {
       type: Boolean,
-      default: true,
+      default: true
     },
     theme: {
       type: String,
-      default: 'idea',
-    },
+      default: 'idea'
+    }
   },
-  data() {
+  data () {
     return {
-      jsonEditor: false,
+      jsonEditor: false
     }
   },
   watch: {
-    value(value) {
+    value (value) {
       const editorValue = this.jsonEditor.getValue()
       if (value !== editorValue) {
         this.jsonEditor.setValue(JSON.stringify(this.value, null, 2))
       }
     },
-    theme() {
+    theme () {
       this.jsonEditor.setOption({
-        theme: this.theme,
+        theme: this.theme
       })
-    },
+    }
   },
-  mounted() {
+  mounted () {
     this.jsonEditor = CodeMirror.fromTextArea(this.$refs.textarea, {
       lineNumbers: true,
       mode: 'application/json',
       gutters: ['CodeMirror-lint-markers'],
       theme: this.theme || 'idea',
       readonly: this.readonly ? 'nocursor' : false,
-      lint: true,
+      lint: true
     })
     this.jsonEditor.setValue(JSON.stringify(this.value, null, 2))
     this.jsonEditor.on('change', (cm) => {
@@ -65,10 +66,10 @@ export default {
     })
   },
   methods: {
-    getValue() {
+    getValue () {
       return this.jsonEditor.getValue()
-    },
-  },
+    }
+  }
 }
 </script>
 

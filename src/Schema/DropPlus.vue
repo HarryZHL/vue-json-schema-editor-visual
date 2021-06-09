@@ -28,13 +28,13 @@ export default {
       default: ''
     }
   },
-  data() {
+  data () {
     return {}
   },
-  created() {},
-  mounted() {},
+  created () {},
+  mounted () {},
   methods: {
-    addFieldAction(...args) {
+    addFieldAction (...args) {
       this.$emit('add-field', ...args)
     }
   }

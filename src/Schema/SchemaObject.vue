@@ -37,7 +37,7 @@ export default {
       default: 'editor_id'
     }
   },
-  data() {
+  data () {
     return {
       tagPaddingLeftStyle: {},
       items: this.data.items
@@ -45,7 +45,7 @@ export default {
   },
 
   computed: {
-    propertyKeys() {
+    propertyKeys () {
       return Object.keys(this.data.properties)
     }
   },

@@ -194,97 +194,97 @@ export default {
     MockSelect,
     DropPlus,
     'schema-array': SchemaArray,
-    'schema-object': SchemaObject,
+    'schema-object': SchemaObject
   },
   props: {
     isMock: {
       type: Boolean,
-      default: true,
+      default: true
     },
     showTitle: {
       type: Boolean,
-      default: false,
+      default: false
     },
     showDefaultValue: { type: Boolean, default: false },
     editorId: {
       type: String,
-      default: 'editor_id',
+      default: 'editor_id'
     },
     name: {
       type: String,
-      default: '',
+      default: ''
     },
     prefix: {
       type: Array,
-      default: () => [],
+      default: () => []
     },
     data: {
       type: Object,
-      default: () => {},
-    },
+      default: () => {}
+    }
   },
-  data() {
+  data () {
     return {
       showIcon: true,
       tagPaddingLeftStyle: {},
       schemaTypes: SCHEMA_TYPE,
-      value: this.data.properties[this.name],
+      value: this.data.properties[this.name]
     }
   },
 
   computed: {
-    nameArray() {
+    nameArray () {
       const prefixArray = [].concat(this.prefix, this.name)
       return [].concat(prefixArray, 'properties')
     },
-    prefixArray() {
+    prefixArray () {
       return [].concat(this.prefix, this.name)
       // return [].concat(this.prefix, 'items')
-    },
+    }
   },
-  beforeMount() {
+  beforeMount () {
     const length = this.prefix.filter((name) => name !== 'properties').length
     this.tagPaddingLeftStyle = {
-      paddingLeft: `${20 * (length + 1)}px`,
+      paddingLeft: `${20 * (length + 1)}px`
     }
   },
   methods: {
-    isUndefined() {
+    isUndefined () {
       return isUndefined
     },
-    handleClickIcon() {
+    handleClickIcon () {
       this.showIcon = !this.showIcon
     },
 
-    handleAction(options) {
+    handleAction (options) {
       const { prefix, name } = this
       this.$jsEditorEvent.emit(`schema-update-${this.editorId}`, {
         eventType: 'add-field',
         prefix,
         name,
-        ...options,
+        ...options
       })
     },
 
-    handleNameChange(e) {
+    handleNameChange (e) {
       this.handleAction({
         eventType: 'update-field-name',
-        value: e.target.value,
+        value: e.target.value
       })
     },
-    handleEnableRequire(e) {
+    handleEnableRequire (e) {
       const { prefix, name } = this
       this.$jsEditorEvent.emit(`schema-update-${this.editorId}`, {
         eventType: 'toggle-required',
         prefix,
         name,
-        required: e,
+        required: e
       })
     },
-    handleChangeMock() {},
-    handleChangeType(value) {
+    handleChangeMock () {},
+    handleChangeType (value) {
       this.handleAction({ eventType: 'schema-type', value })
-    },
-  },
+    }
+  }
 }
 </script>

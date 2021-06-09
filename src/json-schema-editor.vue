@@ -229,7 +229,7 @@ import {
   ArrayDialog,
   BooleanDialog,
   ObjectDialog,
-  RawDialog,
+  RawDialog
 } from './dialog'
 import {
   SCHEMA_TYPE,
@@ -240,7 +240,7 @@ import {
   defaultInitSchemaData,
   handleSchemaRequired,
   cloneObject,
-  deleteData,
+  deleteData
 } from './utils'
 export default {
   name: 'SJsonSchemaEditor',
@@ -253,18 +253,18 @@ export default {
     ArrayDialog,
     BooleanDialog,
     ObjectDialog,
-    RawDialog,
+    RawDialog
   },
   props: {
     schema: { type: Object, default: () => {} },
     isMock: { type: Boolean, default: false },
     showTitle: { type: Boolean, default: false },
     showDefaultValue: { type: Boolean, default: false },
-    showRaw: { type: Boolean, default: false },
+    showRaw: { type: Boolean, default: false }
   },
-  data() {
+  data () {
     const visibleObj = {}
-    SCHEMA_TYPE.map((type) => {
+    SCHEMA_TYPE.forEach((type) => {
       visibleObj[type] = false
     })
     const initSchema = this.schema || defaultInitSchemaData
@@ -279,32 +279,32 @@ export default {
       basicDialogVisible: false,
       basicModalData: { title: '', value: '' },
       settingDialogVisible: visibleObj,
-      settingModalData: {},
+      settingModalData: {}
     }
   },
   watch: {
     schemaData: {
-      handler(newVal) {
+      handler (newVal) {
         log(this, 'watch', newVal)
       },
-      deep: true,
-    },
+      deep: true
+    }
   },
-  mounted() {
+  mounted () {
     log(this, this.schemaData)
     this.$jsEditorEvent.on(
       `schema-update-${this.editorId}`,
       this.handleSchemaUpdateEvent
     )
   },
-  beforeDestroy() {
+  beforeDestroy () {
     this.$jsEditorEvent.off(
       `schema-update-${this.editorId}`,
       this.handleSchemaUpdateEvent
     )
   },
   methods: {
-    handleSchemaUpdateEvent(options) {
+    handleSchemaUpdateEvent (options) {
       const { eventType, ...opts } = options
       switch (eventType) {
         case 'add-field':
@@ -338,20 +338,20 @@ export default {
           break
       }
     },
-    handleClickIcon() {
+    handleClickIcon () {
       this.show = !this.show
     },
-    changeCheckBox(e) {
+    changeCheckBox (e) {
       this.requireAllAction({ required: e, value: this.schemaData })
     },
-    requireAllAction(opts) {
+    requireAllAction (opts) {
       const { value, required } = opts
       const cloneSchema = cloneObject(value)
       handleSchemaRequired(cloneSchema, required)
       this.forceUpdate(cloneSchema)
       this.handleEmitChange(cloneSchema)
     },
-    enableRequireAction(opts) {
+    enableRequireAction (opts) {
       const { prefix, name, required } = opts
       const prefixCopy = cloneDeep(prefix)
       prefixCopy.pop()
@@ -390,7 +390,7 @@ export default {
      * @param isChild 新增子节点
      * @param action 字段和路径
      */
-    addFieldAction(opts) {
+    addFieldAction (opts) {
       log(this, opts)
       const { isChild, name, prefix } = opts
       let parentPrefix = ''
@@ -433,7 +433,7 @@ export default {
     },
 
     // 删除字段
-    deleteFieldAction(opts) {
+    deleteFieldAction (opts) {
       const { name, prefix } = opts
       const curFieldPath = [].concat(prefix, name).join(JSONPATH_JOIN_CHAR)
       // console.log(curFieldPath)
@@ -445,7 +445,7 @@ export default {
     },
 
     // 更新字段名称
-    updateFieldNameAction(opts) {
+    updateFieldNameAction (opts) {
       log(this, opts)
       const { value, name, prefix } = opts
       let requirePrefix = []
@@ -481,7 +481,7 @@ export default {
       this.handleEmitChange(cloneSchema)
     },
     // root
-    handleChangeType2(value) {
+    handleChangeType2 (value) {
       this.schemaData.type = value
       const parentDataItem = this.schemaData.description
         ? { description: this.schemaData.description }
@@ -492,7 +492,7 @@ export default {
       this.handleEmitChange(this.schemaData)
     },
     // schema 类型变化
-    handleChangeType(opts) {
+    handleChangeType (opts) {
       log(this, opts, 2)
       const { value, name, prefix } = opts
       const parentPrefix = [].concat(prefix, name)
@@ -511,7 +511,7 @@ export default {
       this.handleEmitChange(cloneSchema)
     },
     // title & description 编辑
-    handleShowEdit(opts) {
+    handleShowEdit (opts) {
       const { field, name, prefix, isRoot } = opts
       log(this, 'handleShowEdit', name, prefix)
 
@@ -537,10 +537,10 @@ export default {
           field === 'title' ? '标题' : field === 'default' ? '默认值' : '描述',
         value: parentData[field],
         editorId: this.editorId,
-        ...opts,
+        ...opts
       })
     },
-    handleSaveShowEdit(opts) {
+    handleSaveShowEdit (opts) {
       const { value, field, name, prefix, isRoot } = opts
       // console.log(field, value)
       let parentPrefix
@@ -557,7 +557,7 @@ export default {
       this.handleEmitChange(cloneSchema)
     },
     // 高级设置
-    handleSettingAction(opts) {
+    handleSettingAction (opts) {
       const { schemaType, name, prefix, isRoot } = opts
       // console.log(schemaType)
       this.settingDialogVisible[schemaType] = true
@@ -576,11 +576,11 @@ export default {
         isRoot,
         prefix,
         editorId: this.editorId,
-        ...parentData,
+        ...parentData
       }
     },
     // 高级设置更新 schema
-    handleSaveSetting(opts) {
+    handleSaveSetting (opts) {
       const { name, prefix, newData, isRoot } = opts
       const cloneSchema = cloneDeep(this.schemaData)
       console.log(isRoot)
@@ -595,24 +595,24 @@ export default {
       this.forceUpdate()
       this.handleEmitChange(cloneSchema)
     },
-    handleChangeMock() {},
-    handleReqBodyRaw() {
+    handleChangeMock () {},
+    handleReqBodyRaw () {
       this.rawDialogVisible = true
       this.forceUpdate()
     },
     // 解决嵌套对象属性无法刷新页面问题
-    forceUpdate(data) {
+    forceUpdate (data) {
       const temp = data || this.schemaData
       this.schemaData = {}
       this.$nextTick(() => {
         this.schemaData = temp
       })
     },
-    handleEmitChange(schema) {
+    handleEmitChange (schema) {
       // console.log(schema)
       this.$emit('schema-change', schema)
       this.$emit('update:schema', schema)
-    },
-  },
+    }
+  }
 }
 </script>

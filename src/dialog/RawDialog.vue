@@ -24,19 +24,19 @@ export default {
   components: { SJsonEditor },
   inheritAttrs: false,
   props: {
-    schema: { type: Object, default: () => ({}) },
+    schema: { type: Object, default: () => ({}) }
   },
-  data() {
+  data () {
     return {}
   },
-  created() {},
+  created () {},
   methods: {
-    onOpen() {},
-    onClose() {},
-    close() {
+    onOpen () {},
+    onClose () {},
+    close () {
       this.$emit('update:visible', false)
-    },
-  },
+    }
+  }
 }
 </script>
 <style lang="scss" scoped>

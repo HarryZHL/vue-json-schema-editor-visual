@@ -25,39 +25,40 @@ export default {
       type: Object,
       default: () => ({
         title: '提示',
-        value: '',
-      }),
-    },
+        value: ''
+      })
+    }
   },
-  data() {
+  data () {
     return {
       dialogVisible: false,
-      data: '',
+      data: ''
     }
   },
 
   watch: {
     initData: {
-      handler() {
+      handler () {
         this.data = this.initData.value
       },
-      deep: true,
-    },
+      deep: true
+    }
   },
-  created() {},
+  created () {},
   methods: {
-    close() {
+    close () {
       this.$emit('update:visible', false)
     },
-    handleOk() {
+    handleOk () {
+      // eslint-disable-next-line vue/no-mutating-props
       this.initData.value = this.data
       this.$jsEditorEvent.emit(`schema-update-${this.initData.editorId}`, {
         eventType: 'save-showedit',
-        ...this.initData,
+        ...this.initData
       })
       this.close()
-    },
-  },
+    }
+  }
 }
 </script>
 
