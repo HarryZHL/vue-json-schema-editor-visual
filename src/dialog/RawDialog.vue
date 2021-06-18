@@ -9,7 +9,7 @@
       @close="onClose"
     >
       <div class="sourcecode">
-        <s-json-editor :value="schema"></s-json-editor>
+        <json-editor :value="schema"></json-editor>
       </div>
       <span slot="footer" class="dialog-footer">
         <el-button @click="close">关 闭</el-button>
@@ -18,10 +18,10 @@
   </div>
 </template>
 <script>
-import SJsonEditor from '../json-editor'
+import JsonEditor from '../json-editor'
 export default {
   name: 'RawDialog',
-  components: { SJsonEditor },
+  components: { JsonEditor },
   inheritAttrs: false,
   props: {
     schema: { type: Object, default: () => ({}) }

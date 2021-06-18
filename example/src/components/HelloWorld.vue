@@ -1,25 +1,18 @@
 
 <template>
   <div>
-    <el-row>
-      <el-col :span="6">
-        <el-button size="mini" type="primary" @click="handleToggleSchema"
-          >改变Schema</el-button
-        >
-        <el-button size="mini" type="info" @click="handlePageParams"
-          >Toggle 分页参数</el-button
-        >
-      </el-col>
-      <el-col :span="18">
-        <s-json-schema-editor
-          :key="schemaKey"
-          :schema="schema"
-          :show-default-value="true"
-          :is-mock="false"
-          @schema-change="onSchemaChange"
-        />
-      </el-col>
-    </el-row>
+    <el-button size="mini" type="primary" @click="handleToggleSchema"
+      >改变Schema</el-button>
+    <el-button size="mini" type="info" @click="handlePageParams"
+      >Toggle 分页参数</el-button>
+    <el-button size="mini" type="primary" @click="getRequiredParams"
+      >获取勾选参数</el-button>
+    <json-schema-editor
+      ref="schemaEditor"
+      :key="schemaKey"
+      :schema="schema"
+      @schema-change="onSchemaChange"
+    />
   </div>
 </template>
 <script>
@@ -84,6 +77,10 @@ export default {
     this.schemaKey = Date.now()
   },
   methods: {
+    getRequiredParams () {
+      const requiredItems = this.$refs.schemaEditor.getRequiredItems()
+      console.log('requiredItems', requiredItems)
+    },
     handleToggleSchema () {
       if (JSON.stringify(this.schema) === JSON.stringify(this.schema2)) {
         this.schema = Object.assign({}, this.schema3)

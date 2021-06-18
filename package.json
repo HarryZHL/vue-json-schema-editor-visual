@@ -1,13 +1,11 @@
 {
-  "name": "vue-json-schema-editor-visual",
-  "version": "0.2.6",
-  "description": "A json-schema editor of high efficient and easy-to-use, base on Vue.",
+  "name": "fls-json-schema-editor",
+  "version": "0.0.2",
+  "description": "A json-schema editor, base on Vue.",
   "keywords": [
     "json-schema"
   ],
-  "author": "giscafer <giscafer@outlook.com>",
-  "homepage": "https://github.com/giscafer/vue-json-schema-editor-visual",
-  "license": "MIT",
+  "author": "zhanghelong",
   "main": "dist/json-schema-editor.min.js",
   "unpkg": "dist/json-schema-editor.min.js",
   "directories": {
@@ -22,10 +20,6 @@
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org/"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/giscafer/vue-json-schema-editor-visual.git"
   },
   "scripts": {
     "clean": "rimraf dist",

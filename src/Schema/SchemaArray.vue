@@ -91,7 +91,7 @@
         </el-input>
       </el-col>
       <el-col :span="isMock ? 2 : 3" class="col-item col-item-setting">
-        <span
+        <!-- <span
           class="adv-set"
           @click="
             handleAction({ eventType: 'setting', schemaType: items.type })
@@ -100,7 +100,7 @@
           <el-tooltip placement="top" content="高级设置">
             <i class="el-icon-setting"></i>
           </el-tooltip>
-        </span>
+        </span> -->
 
         <span
           v-if="items.type === 'object'"

@@ -1,14 +1,17 @@
 <template>
-  <div>
-    <el-button
-      v-if="showRaw"
-      type="primary"
-      size="mini"
-      style="margin-bottom: 10px"
-      @click="handleReqBodyRaw"
-      >RAW查看</el-button
-    >
-    <div class="json-schema-vue-editor">
+  <el-row>
+    <el-col :span="8">
+      <!-- <el-button
+        v-if="showRaw"
+        type="primary"
+        size="mini"
+        style="margin-bottom: 10px"
+        @click="handleReqBodyRaw"
+        >查看Schema源码</el-button> -->
+        <json-editor :value="originJsonString" @changed="jsonEditorChange"></json-editor>
+    </el-col>
+    <el-col :span="16">
+      <div v-if="jsonSchemaVueEditorShow" class="json-schema-vue-editor">
       <el-row type="flex" align="middle">
         <el-col :span="8" class="col-item name-item col-item-name">
           <el-row type="flex" justify="space-around" align="middle">
@@ -136,7 +139,7 @@
           </el-input>
         </el-col>
         <el-col :span="2" class="col-item col-item-setting">
-          <span
+          <!-- <span
             class="adv-set"
             @click="
               handleSchemaUpdateEvent({
@@ -150,7 +153,7 @@
             <el-tooltip placement="top" content="高级设置">
               <i class="el-icon-setting"></i>
             </el-tooltip>
-          </span>
+          </span> -->
 
           <span
             v-if="schemaData.type === 'object'"
@@ -177,42 +180,43 @@
         :editor-id="editorId"
       />
       <!-- RAW弹窗 -->
-      <RawDialog
+      <!-- <RawDialog
         v-if="showRaw"
         :visible.sync="rawDialogVisible"
         :schema="schemaData"
-      />
+      /> -->
       <!-- 高级设置弹窗 -->
-      <BasicDialog
+      <!-- <BasicDialog
         :visible.sync="basicDialogVisible"
         :init-data="basicModalData"
-      />
-      <StringDialog
+      /> -->
+      <!-- <StringDialog
         :visible.sync="settingDialogVisible.string"
         :init-data="settingModalData"
-      />
-      <NumberDialog
+      /> -->
+      <!-- <NumberDialog
         :visible.sync="settingDialogVisible.number"
         :init-data="settingModalData"
-      />
-      <NumberDialog
+      /> -->
+      <!-- <NumberDialog
         :visible.sync="settingDialogVisible.integer"
         :init-data="settingModalData"
-      />
-      <ArrayDialog
+      /> -->
+      <!-- <ArrayDialog
         :visible.sync="settingDialogVisible.array"
         :init-data="settingModalData"
-      />
-      <BooleanDialog
+      /> -->
+      <!-- <BooleanDialog
         :visible.sync="settingDialogVisible.boolean"
         :init-data="settingModalData"
-      />
-      <ObjectDialog
+      /> -->
+      <!-- <ObjectDialog
         :visible.sync="settingDialogVisible.object"
         :init-data="settingModalData"
-      />
+      /> -->
     </div>
-  </div>
+    </el-col>
+  </el-row>
 </template>
 <script>
 import set from 'lodash/set'
@@ -222,15 +226,15 @@ import cloneDeep from 'lodash/cloneDeep'
 import SchemaJson from './Schema'
 import MockSelect from './MockSelect'
 import './jsonschema.scss'
-import {
-  BasicDialog,
-  StringDialog,
-  NumberDialog,
-  ArrayDialog,
-  BooleanDialog,
-  ObjectDialog,
-  RawDialog
-} from './dialog'
+// import {
+//   BasicDialog,
+//   StringDialog,
+//   NumberDialog,
+//   ArrayDialog,
+//   BooleanDialog,
+//   ObjectDialog,
+//   RawDialog
+// } from './dialog'
 import {
   SCHEMA_TYPE,
   log,
@@ -242,25 +246,27 @@ import {
   cloneObject,
   deleteData
 } from './utils'
+import JsonEditor from './json-editor'
 export default {
-  name: 'SJsonSchemaEditor',
+  name: 'JsonSchemaEditor',
   components: {
     MockSelect,
     SchemaJson,
-    BasicDialog,
-    StringDialog,
-    NumberDialog,
-    ArrayDialog,
-    BooleanDialog,
-    ObjectDialog,
-    RawDialog
+    // BasicDialog,
+    // StringDialog,
+    // NumberDialog,
+    // ArrayDialog,
+    // BooleanDialog,
+    // ObjectDialog,
+    // RawDialog,
+    JsonEditor
   },
   props: {
     schema: { type: Object, default: () => {} },
     isMock: { type: Boolean, default: false },
     showTitle: { type: Boolean, default: false },
     showDefaultValue: { type: Boolean, default: false },
-    showRaw: { type: Boolean, default: false }
+    showRaw: { type: Boolean, default: true }
   },
   data () {
     const visibleObj = {}
@@ -279,12 +285,20 @@ export default {
       basicDialogVisible: false,
       basicModalData: { title: '', value: '' },
       settingDialogVisible: visibleObj,
-      settingModalData: {}
+      settingModalData: {},
+      requiredItems: new Set(),
+      originJson: {},
+      originJsonString: '{}',
+      jsonSchema: {},
+      jsonSchemaVueEditorShow: true
     }
   },
   watch: {
     schemaData: {
       handler (newVal) {
+        // this.schemaToJson(newVal, this.originJson)
+        // this.originJsonString = JSON.stringify(this.originJson, null, 2)
+        // debugger
         log(this, 'watch', newVal)
       },
       deep: true
@@ -292,6 +306,8 @@ export default {
   },
   mounted () {
     log(this, this.schemaData)
+    this.schemaToJson(this.schema, this.originJson)
+    this.originJsonString = JSON.stringify(this.originJson, null, 2)
     this.$jsEditorEvent.on(
       `schema-update-${this.editorId}`,
       this.handleSchemaUpdateEvent
@@ -336,6 +352,44 @@ export default {
           break
         default:
           break
+      }
+    },
+    getRequiredItems () {
+      const cloneSchemaData = cloneDeep(this.schemaData)
+      this.loopRequiredItems(cloneSchemaData)
+      return Array.from(this.requiredItems)
+    },
+    loopRequiredItems (schemaData, isArray = false) {
+      if (schemaData.required && schemaData.required.length) {
+        schemaData.required.forEach(item => {
+          this.requiredItems.add(schemaData.parent ? `${schemaData.parent}.${item}` : `${item}`)
+        })
+      }
+      if (schemaData.type === 'object' && schemaData.properties) {
+        Object.keys(schemaData.properties).forEach(k => {
+          schemaData.properties[k].parent = schemaData.parent ? `${schemaData.parent}.${k}` : `${k}`
+          this.loopRequiredItems(schemaData.properties[k])
+        })
+      }
+      if (schemaData.type === 'array' && schemaData.items.properties) {
+        schemaData.items.parent = schemaData.parent ? `${schemaData.parent}[0]` : ''
+        this.loopRequiredItems(schemaData.items, true)
+      }
+    },
+    jsonEditorChange (value) {
+      console.log('jsonEditorChange')
+      try {
+        const json = JSON.parse(value)
+        this.jsonSchema = {}
+        this.jsonToSchema(json, this.jsonSchema)
+        this.forceUpdate(this.jsonSchema)
+        this.handleEmitChange(this.jsonSchema)
+        // this.jsonSchemaVueEditorShow = false
+        // this.$nextTick(() => {
+        //   this.jsonSchemaVueEditorShow = true
+        // })
+      } catch (error) {
+
       }
     },
     handleClickIcon () {
@@ -609,9 +663,53 @@ export default {
       })
     },
     handleEmitChange (schema) {
-      // console.log(schema)
       this.$emit('schema-change', schema)
       this.$emit('update:schema', schema)
+      this.schemaToJson(schema, this.originJson)
+      this.originJsonString = JSON.stringify(this.originJson, null, 2)
+    },
+    schemaToJson (schema, json) {
+      if (schema.type === 'object' && schema.properties) {
+        Object.keys(schema.properties).forEach(k => {
+          switch (schema.properties[k].type) {
+            case 'object':
+              json[k] = {}
+              if (schema.properties[k].properties) {
+                this.schemaToJson(schema.properties[k], json[k])
+              }
+              break
+            case 'array':
+              json[k] = [{}]
+              if (schema.properties[k].items.properties) {
+                this.schemaToJson(schema.properties[k].items, json[k][0])
+              }
+              break
+            default:
+              json[k] = schema.properties[k].type
+              break
+          }
+        })
+      }
+    },
+    jsonToSchema (json, schema) {
+      if (typeof json === 'object') {
+        if (Array.isArray(json)) {
+          schema.type = 'array'
+          schema.items = {}
+          this.jsonToSchema(json[0], schema.items)
+        } else {
+          schema.type = 'object'
+          Object.keys(json).forEach(k => {
+            if (!schema.properties) {
+              schema.properties = {}
+            }
+            schema.properties[k] = {}
+            this.jsonToSchema(json[k], schema.properties[k])
+          })
+        }
+      } else {
+        schema.type = json
+      }
     }
   }
 }

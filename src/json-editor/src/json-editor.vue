@@ -17,11 +17,11 @@ import 'codemirror/addon/lint/json-lint'
 require('script-loader!jsonlint')
 
 export default {
-  name: 'SJsonEditor',
+  name: 'JsonEditor',
   props: {
     value: {
-      type: Object,
-      default: () => ({})
+      type: String,
+      default: ''
     },
     readonly: {
       type: Boolean,
@@ -41,7 +41,7 @@ export default {
     value (value) {
       const editorValue = this.jsonEditor.getValue()
       if (value !== editorValue) {
-        this.jsonEditor.setValue(JSON.stringify(this.value, null, 2))
+        this.jsonEditor.setValue(this.value)
       }
     },
     theme () {
@@ -59,10 +59,12 @@ export default {
       readonly: this.readonly ? 'nocursor' : false,
       lint: true
     })
-    this.jsonEditor.setValue(JSON.stringify(this.value, null, 2))
+    this.jsonEditor.setValue(this.value)
     this.jsonEditor.on('change', (cm) => {
-      this.$emit('changed', cm.getValue())
-      this.$emit('input', cm.getValue())
+      const cmValue = cm.getValue()
+      this.$emit('changed', cmValue)
+      console.log('cmValueChange', cmValue)
+      this.$emit('input', cmValue)
     })
   },
   methods: {
@@ -81,6 +83,7 @@ export default {
 .json-editor >>> .CodeMirror {
   height: auto;
   min-height: 300px;
+  text-align: left;
 }
 .json-editor >>> .CodeMirror-scroll {
   min-height: 300px;

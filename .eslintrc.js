@@ -18,7 +18,11 @@ module.exports = {
 
   // it is base on https://github.com/vuejs/eslint-config-vue
 
-  rules: {},
+  rules: {
+    'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
+    // 'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off'
+    'no-console': 'off'
+  },
 
   plugins: ['promise']
 
